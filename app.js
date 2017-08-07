@@ -5,8 +5,8 @@ const builder = require('botbuilder');
 
 // Create chat connector for communicating with the Bot Framework Service
 const connector = new builder.ChatConnector({
-  appId: process.env.MICROSOFT_APP_ID,
-  appPassword: process.env.MICROSOF_APP_PASSWORD
+  appId: "53ff7a56-db6d-461f-bd36-9f681ee7f915",
+  appPassword: "S6PqvYpm0i792RvqcBaOVNC"
 });
 
 // Setup Restify Server
