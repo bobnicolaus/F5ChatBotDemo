@@ -11,8 +11,16 @@ const connector = new builder.ChatConnector({
 
 // Setup Restify Server
 const server = restify.createServer();
-// Listen for messages from users
+
+// Handle Bot Framework messages
 server.post('/api/messages', connector.listen());
+
+// Serve a static web page
+server.get(/.*/, restify.serveStatic({
+	'directory': '.',
+	'default': 'index.html'
+}));
+
 server.listen(process.env.port || process.env.PORT || 3978, function() {
   console.log('%s listening to %s', server.name, server.url);
 });
