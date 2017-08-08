@@ -102,7 +102,7 @@ bot.dialog('getLicenseType',
     if (args) {
       session.dialogData.isReprompt = args.isReprompt;
       name = session.dialogData.name = args.name;
-      session.send('Hi, ${name}!');
+      session.send(`Hi, ${name}!`);
     }
 
     var adaptiveCardMessage = new builder.Message(session).addAttachment({
