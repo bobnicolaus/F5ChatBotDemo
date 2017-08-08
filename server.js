@@ -28,21 +28,26 @@ server.listen(process.env.port || process.env.PORT || 3978, function() {
 // Receive messages from the users and respond by echoing each message back (prefixed with 'You said: ')
 const bot = module.exports = new builder.UniversalBot(connector, [
   (session, args, next) => {
-    session.send(`Hi there! I'm F5ChatbotDemo.`);
+    session.send('Hi there! I am F5ChatbotDemo.');
     session.beginDialog('getName');
   },
 
   (session, results, next) => {
     if (results.response) {
       const name = session.privateConversationData.name = results.response;
-      session.beginDialog('adaptive_card_demo', {name: name});
+      session.beginDialog('getLicenseType', {name: name});
     } else {
-      session.endConversation(`I am sorry. I do not understand that. Could we start over?`)
+      session.endConversation('I am sorry. I do not understand that. Could we start over?');
     }
   },
 
   (session, results, next) => {
-    session.beginDialog('getEmail');
+    if (results.response) {
+      const licenseType = session.privateConversationData.licenseType = results.response;
+      session.beginDialog('getEmail');
+    } else {
+      session.endConversation('I am sorry. I do not understand that. Could we start over?');
+    }
   }
 
 ]);
@@ -71,23 +76,23 @@ bot.dialog('getName', [
 
 ]);
 
-bot.dialog('adaptive_card_demo',
+bot.dialog('getLicenseType',
   (session, args, next) => {
 
     if (session.message && session.message.value) {
 
       switch(session.message.value.type) {
         case "buyLicense":
-          session.send("Great! It seems that you already have something in mind.");
-          session.endDialogWithResult({response: "Buy license"});
+          session.send('Great! It seems that you already have something in mind.');
+          session.endDialogWithResult({response: 'Buy license'});
           break;
         case "getTrial":
-          session.send("Sure! We understand that you want to evaluate our product before making a decision.");
-          session.send("Could you please let us know your email address so that we can send the license directly?");
-          session.endDialogWithResult({response: "Get trial"});
+          session.send('Sure! We understand that you want to evaluate our product before making a decision.');
+          session.send('Could you please let us know your email address so that we can send the license directly?');
+          session.endDialogWithResult({response: 'Get trial'});
           break;
         default:
-          session.send("None");
+          session.send('None');
       }
 
       return;
