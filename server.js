@@ -32,7 +32,7 @@ const bot = module.exports = new builder.UniversalBot(connector, [
     session.beginDialog('getName');
   },
 
-  (session, results, next) => {
+  /*(session, results, next) => {
     if (results.response) {
       const name = session.privateConversationData.name = results.response;
       session.beginDialog('getLicenseType', {name: name});
@@ -48,7 +48,7 @@ const bot = module.exports = new builder.UniversalBot(connector, [
     } else {
       session.endConversation('I am sorry. I do not understand that. Could we start over?');
     }
-  }
+  }*/
 
 ]);
 
