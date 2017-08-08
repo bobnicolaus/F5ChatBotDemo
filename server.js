@@ -82,7 +82,7 @@ bot.dialog('getLicenseType',
 
     if (session.message && session.message.value) {
 
-      const licenseType = session.message.value.type;
+      var licenseType = session.message.value.type;
       switch(licenseType) {
         case "buyLicense":
           session.send('Great! It seems that you already have something in mind.');
@@ -178,6 +178,8 @@ bot.dialog('getEmail', [
         session.replaceDialog('getEmail', {isReprompt: true});
       }
     } else {
+      session.send(`Got it! We will send the license to your email address: ${emailAddress}`);
+      session.send(`Thank you.`);
       session.endDialogWithResult({response: emailAddress.trim()});
     }
   },
