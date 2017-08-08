@@ -28,8 +28,7 @@ server.listen(process.env.port || process.env.PORT || 3978, function() {
 // Receive messages from the users and respond by echoing each message back (prefixed with 'You said: ')
 const bot = module.exports = new builder.UniversalBot(connector, [
   (session, args, next) => {
-    session.send(`Hi there! I'm a sample bot showing how multiple dialogs work.`);
-    session.send(`Let's start the first dialog, which will ask you your name.`);
+    session.send(`Hi there! I'm F5ChatbotDemo.`);
     session.beginDialog('getName');
   },
 
@@ -38,9 +37,13 @@ const bot = module.exports = new builder.UniversalBot(connector, [
       const name = session.privateConversationData.name = results.response;
       session.beginDialog('adaptive_card_demo', {name: name});
     } else {
-      session.endConversation(`Sorry, I didn't understand the response. Let's start over.`)
+      session.endConversation(`I am sorry. I do not understand that. Could we start over?`)
     }
   },
+
+  (session, results, next) => {
+    session.beginDialog('getEmail');
+  }
 
 ]);
 
@@ -49,7 +52,7 @@ bot.dialog('getName', [
     if (args) {
       session.dialogData.isReprompt = args.isReprompt;
     }
-    builder.Prompts.text(session, 'What is your name?');
+    builder.Prompts.text(session, 'May I know your name please?');
   },
 
   (session, results, next) => {
@@ -58,7 +61,7 @@ bot.dialog('getName', [
       if (session.dialogData.isReprompt) {
         session.endDialogWithResult({response: ''});
       } else {
-        session.send('Sorry, name must be at least 3 characters.');
+        session.send('I am sorry, name must be at least 3 characters.');
         session.replaceDialog('getName', {isReprompt: true});
       }
     } else {
@@ -75,7 +78,7 @@ bot.dialog('adaptive_card_demo',
 
       switch(session.message.value.type) {
         case "buyLicense":
-          //session.send("Buy license");
+          session.send("Great! It seems that you already have something in mind.");
           session.endDialogWithResult({response: "Buy license"});
           break;
         case "getTrial":
@@ -148,3 +151,27 @@ bot.dialog('adaptive_card_demo',
 
   session.send(adaptiveCardMessage);
 });
+
+bot.dialog('getEmail', [
+  (session, args, next) => {
+    if (args) {
+      session.dialogData.isReprompt = args.isReprompt;
+    }
+    builder.Prompts.text(session, 'May I know your email address please?');
+  },
+
+  (session, results, next) => {
+    const emailAddress = results.response;
+    if (!emailAddress || emailAddress.trim().length < 7) {
+      if (session.dialogData.isReprompt) {
+        session.endDialogWithResult({response: ''});
+      } else {
+        session.send('I am sorry, you must provide a valid email address.');
+        session.replaceDialog('getEmail', {isReprompt: true});
+      }
+    } else {
+      session.endDialogWithResult({response: emailAddress.trim()});
+    }
+  },
+
+]);
