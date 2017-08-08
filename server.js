@@ -32,7 +32,7 @@ const bot = module.exports = new builder.UniversalBot(connector, [
     session.beginDialog('getName');
   },
 
-  /*(session, results, next) => {
+  (session, results, next) => {
     if (results.response) {
       const name = session.privateConversationData.name = results.response;
       session.beginDialog('getLicenseType', {name: name});
@@ -41,7 +41,7 @@ const bot = module.exports = new builder.UniversalBot(connector, [
     }
   },
 
-  (session, results, next) => {
+  /*(session, results, next) => {
     if (results.response) {
       const licenseType = session.privateConversationData.licenseType = results.response;
       session.beginDialog('getEmail');
@@ -102,7 +102,7 @@ bot.dialog('getLicenseType',
     if (args) {
       session.dialogData.isReprompt = args.isReprompt;
       name = session.dialogData.name = args.name;
-      session.send(`Hi, ${name}!`);
+      session.send('Hi, ${name}!');
     }
 
     var adaptiveCardMessage = new builder.Message(session).addAttachment({
