@@ -45,7 +45,7 @@ const bot = module.exports = new builder.UniversalBot(connector, [
     if (results.response) {
       const licenseType = session.privateConversationData.licenseType = results.response;
       session.send('Could you please let us know your email address so that we can send the license directly?');
-      session.beginDialog('getEmail');
+      session.beginDialog('getEmail', {licenseType: licenseType});
     } else {
       session.endConversation('I am sorry. I do not understand that. Could we start over?');
     }
