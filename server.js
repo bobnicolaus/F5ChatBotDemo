@@ -41,14 +41,15 @@ const bot = module.exports = new builder.UniversalBot(connector, [
     }
   },
 
-  /*(session, results, next) => {
+  (session, results, next) => {
     if (results.response) {
       const licenseType = session.privateConversationData.licenseType = results.response;
+      session.send('Could you please let us know your email address so that we can send the license directly?');
       session.beginDialog('getEmail');
     } else {
       session.endConversation('I am sorry. I do not understand that. Could we start over?');
     }
-  }*/
+  }
 
 ]);
 
@@ -81,15 +82,17 @@ bot.dialog('getLicenseType',
 
     if (session.message && session.message.value) {
 
-      switch(session.message.value.type) {
+      const licenseType = session.message.value.type;
+      switch(licenseType) {
         case "buyLicense":
           session.send('Great! It seems that you already have something in mind.');
-          session.endDialogWithResult({response: 'Buy license'});
+          licenseType = 'Buy license';
+          session.endDialogWithResult({response: licenseType});
           break;
         case "getTrial":
           session.send('Sure! We understand that you want to evaluate our product before making a decision.');
-          session.send('Could you please let us know your email address so that we can send the license directly?');
-          session.endDialogWithResult({response: 'Get trial'});
+          licenseType = 'Get trial';
+          session.endDialogWithResult({response: licenseType});
           break;
         default:
           session.send('None');
